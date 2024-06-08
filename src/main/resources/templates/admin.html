@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="EN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+            integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
+            crossorigin="anonymous"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/createUser.js"></script>
+    <script src="/static/js/deleteUser.js"></script>
+    <script src="/static/js/getOperations.js"></script>
+    <script src="/static/js/editUser.js"></script>
+    <script src="/js/team/createTeam.js"></script>
+    <script src="/js/team/deleteTeam.js"></script>
+    <script src="/js/team/editTeam.js"></script>
+    <script src="/js/league/createLeague.js"></script>
+    <script src="/js/league/deleteLeague.js"></script>
+    <script src="/js/league/editLeague.js"></script>
+    <script src="/js/country/createCountry.js"></script>
+    <script src="/js/country/deleteCountry.js"></script>
+    <script src="/js/country/editCountry.js"></script>
+    <script src="/js/quotation/createQuotation.js"></script>
+    <script src="/js/quotation/deleteQuotation.js"></script>
+    <script src="/js/quotation/editQuotation.js"></script>
+    <script src="/js/event/createEvent.js"></script>
+    <script src="/js/event/deleteEvent.js"></script>
+    <script src="/js/event/editEvent.js"></script>
+    <script src="/js/match/createMatch.js"></script>
+    <script src="/js/match/deleteMatch.js"></script>
+    <script src="/js/match/editMatch.js"></script>
+    <script src="/js/match/analyseMatch.js"></script>
+    <title>Админ-панель</title>
+    <!--  <title th:text="${title}"/>-->
+    <meta name="theme-color" content="#7952b3">
+    <style>
+        .row {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            padding-right: 10px;
+        }
+
+        .list-group-item {
+            text-align: left;
+        }
+
+        .list-group {
+            padding-top: 20px;
+        }
+
+        .form-control {
+            max-width: 300px;
+            max-height: 40px;
+            font-size: 16px;
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        #newUser {
+            font-weight: bold;
+        }
+
+        .select {
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="index/header-old :: header"></div>
+<main>
+
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-2">
+                <ul class="list-group list-group-flush">
+                    <li>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" class="list-group-item" id="adminTab"
+                           href="#adminTable" data-toggle="tab">Администратор</a>
+                    </li>
+                    <li>
+                        <a class="list-group-item" id="userTab"
+                           href="#userTable" data-toggle="tab">Пользователь</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-10">
+                <h1 className="h1 a1" id="h1a1"></h1>
+                <div class="tabs">
+                    <ul sec:authorize="hasRole('ROLE_ADMIN')" class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#adminTable" data-toggle="tab">Пользователи</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#newUser" data-toggle="tab">Новый пользователь</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#teamTable" data-toggle="tab">Команды</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#newTeam" data-toggle="tab">Новая команда</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#leagueTable" data-toggle="tab">Лиги</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#newLeague" data-toggle="tab">Новая лига</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#countryTable" data-toggle="tab">Страны</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#newCountry" data-toggle="tab">Добавить страну</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#matchTable" data-toggle="tab">Матчи</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#newMatch" data-toggle="tab">Добавить матч</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#quotationTable" data-toggle="tab">Котировки</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#newQuotation" data-toggle="tab">Добавить котировку</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#eventsMatchTable" data-toggle="tab">События матча</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#newEvent" data-toggle="tab">Добавить событие</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#statTable" data-toggle="tab">Статистика матча</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content border">
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="adminTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Все пользователи</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableAllUsers">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Имя</th>
+                                    <th>Фамилия</th>
+                                    <th>Возраст</th>
+                                    <th>E-mail</th>
+                                    <th>Роль</th>
+                                    <th>Изменить</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="teamTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Все команды</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableAllTeams">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Название</th>
+                                    <th>Лига</th>
+                                    <th>Уровень команды</th>
+                                    <th>Форма команды</th>
+                                    <th>Изменить</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="leagueTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Все лиги</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableAllLeagues">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Название</th>
+                                    <th>Страна лиги</th>
+                                    <th>Изменить</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="countryTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Все страны</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableAllCountries">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Страна</th>
+                                    <th>Флаг</th>
+                                    <th>Изменить</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="matchTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Все матчи</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableAllMatches">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Дата</th>
+                                    <th>Лига</th>
+                                    <th>Хозяева</th>
+                                    <th>Гости</th>
+                                    <th>События</th>
+                                    <th>Добавить событие</th>
+                                    <th>Статистика</th>
+                                    <th>Изменить</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="quotationTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Все котировки</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableAllQuotes">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Название</th>
+                                    <th>Изменить</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="eventsMatchTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">События матча</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableEventsMatch">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Команда</th>
+                                    <th>Период матча</th>
+                                    <th>Котировка</th>
+                                    <th>Значение</th>
+                                    <th>Изменить</th>
+                                    <th>Удалить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="statTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">
+                    <span class="navbar-text" id="infoMatch">
+                    </span>
+                            </div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableStat">
+                                <thead>
+                                <tr>
+                                    <th>Котировка</th>
+                                    <th>Команда</th>
+                                    <th>1-й Тайм</th>
+                                    <th>2-й Тайм</th>
+                                    <th>Матч</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="userTable">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Пользователь</div>
+                        </nav>
+                        <div>
+                            <table class="table table-striped" id="tableUser">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Имя</th>
+                                    <th>Фамилия</th>
+                                    <th>Возраст</th>
+                                    <th>E-mail</th>
+                                    <th>Роль</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade text-center" id="newUser">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Добавить пользователя</div>
+                        </nav>
+                        <form id="addForm">
+                            <div class="form-group">
+                                <label for="firstnameCreate">Имя</label>
+                                <input type="text" class="form-control" id="firstnameCreate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastnameCreate">Фамилия</label>
+                                <input type="text" class="form-control" id="lastnameCreate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ageCreate">Возраст</label>
+                                <input type="number" class="form-control" id="ageCreate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="emailCreate">E-mail</label>
+                                <input type="email" class="form-control" id="emailCreate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="passwordCreate">Пароль</label>
+                                <input type="password" class="form-control" id="passwordCreate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rolesCreate" class="com-form-label">Роль:</label>
+                                <select multiple id="rolesCreate" class="form-control select" size="2">
+                                    <option value="ROLE_USER">Пользователь</option>
+                                    <option value="ROLE_ADMIN">Администратор</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="addUser">Добавить пользователя</button>
+                        </form>
+                        <!--            <div class="p2">-->
+                        <!--              <button class="btn btn-success" id="addUser" type="submit">Add new user</button>-->
+                        <!--            </div>-->
+                        <!--            </div>-->
+                    </div>
+                    <div class="tab-pane fade text-center" id="newTeam">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Добавить команду</div>
+                        </nav>
+                        <form id="addTeamForm">
+                            <div class="form-group">
+                                <label for="nameCreate">Название</label>
+                                <input type="text" class="form-control" id="nameCreate" required>
+                            </div>
+                            <div class="form-group" id="namesLeaguesTeam">
+                                <label for="leagueTeamCreate" class="com-form-label">Лига:</label>
+                                <select multiple id="leagueTeamCreate" class="form-control select" size="10">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="levelTeamCreate">Уровень команды</label>
+                                <input type="number" class="form-control" id="levelTeamCreate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="formTeamCreate">Форма команды</label>
+                                <input type="number" class="form-control" id="formTeamCreate" required>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="addTeam">Добавить команду</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade text-center" id="newLeague">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Добавить лигу</div>
+                        </nav>
+                        <form id="addLeagueForm">
+                            <div class="form-group">
+                                <label for="nameLeagueCreate">Название</label>
+                                <input type="text" class="form-control" id="nameLeagueCreate" required>
+                            </div>
+                            <div class="form-group" id="namesCountries">
+                                <label for="countryLeagueCreate" class="com-form-label">Страна:</label>
+                                <select id="countryLeagueCreate" class="form-control select" size="10">
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="addLeague">Добавить лигу</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade text-center" id="newCountry">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Добавить страну</div>
+                        </nav>
+                        <form id="addCountryForm">
+                            <div class="form-group">
+                                <label for="nameCountryCreate">Название</label>
+                                <input type="text" class="form-control" id="nameCountryCreate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="flagCreate">Флаг</label>
+                                <input type="file" class="form-control" id="flagCreate" required>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="addCountry">Добавить страну в Базу
+                            </button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade text-center" id="newMatch">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Создать матч</div>
+                        </nav>
+                        <form id="addMatchForm">
+                            <div class="form-group">
+                                <label for="dateTimeMatchCreate">Дата матча</label>
+                                <input type="datetime-local" class="form-control" id="dateTimeMatchCreate" required>
+                            </div>
+                            <div class="form-group" id="namesLeaguesMatch">
+                                <label for="leagueMatchCreate" class="com-form-label">Лига матча:</label>
+                                <select id="leagueMatchCreate" class="form-control select" size="10">
+                                </select>
+                            </div>
+                            <div class="form-group" id="namesTeamsHomeMatch">
+                                <label for="homeTeamCreate" class="com-form-label">Хозяева:</label>
+                                <select id="homeTeamCreate" class="form-control select" size="10">
+                                </select>
+                            </div>
+                            <div class="form-group" id="namesTeamsGuestMatch">
+                                <label for="guestTeamCreate" class="com-form-label">Гости:</label>
+                                <select id="guestTeamCreate" class="form-control select" size="10">
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="addMatch">Создать матч</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade text-center" id="newQuotation">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Добавить котировку</div>
+                        </nav>
+                        <form id="addQuotationForm">
+                            <div class="form-group">
+                                <label for="nameQuotationCreate">Название</label>
+                                <input type="text" class="form-control" id="nameQuotationCreate" required>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="addQuotation">Добавить котировку</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade text-center" id="newEvent">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="navbar-brand">Добавить событие</div>
+                        </nav>
+                        <form id="addEventForm">
+                            <div class="form-group">
+                                <label class="com-form-label">Команда</label>
+                                <label id="nameTeamHomeEvent"></label>
+                                <label id="nameTeamGuestEvent"></label>
+                            </div>
+                            <div class="form-group">
+                                <label for="periodMatchCreate">Период матча (0 - Основной матч, 1 - Первый тайм, 2 -
+                                    Второй тайм, 3 - Экстра тайм)</label>
+                                <input type="number" class="form-control" id="periodMatchCreate" required>
+                            </div>
+                            <div class="form-group" id="namesQuotesEvent">
+                                <label for="quotationEventCreate" class="com-form-label">Котировка:</label>
+                                <select id="quotationEventCreate" class="form-control select" size="10">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="valueEventCreate">Значение</label>
+                                <input type="number" class="form-control" id="valueEventCreate" required value="0">
+                            </div>
+                            <button type="button" class="btn btn-primary" id="addEvent">Добавить событие</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                    </div>
+
+                    <div class="modal-footer">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--<div th:insert="index/footer :: footer"></div>-->
+</body>
+</html>
