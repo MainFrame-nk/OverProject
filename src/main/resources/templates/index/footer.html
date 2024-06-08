@@ -1,11 +1,19 @@
 <div th:fragment="footer">
-    <footer class="text-body-secondary py-5">
-        <div class="container">
-            <p class="float-end mb-1">
-                <a href="#">Подняться</a>
-            </p>
-            <p class="mb-1">Всё созданное - сотворено вами.</p>
-            <p class="mb-0">Создано разработчиком MainFrame</a>.</p>
-        </div>
-    </footer>
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2024 Создано TechTinkerer | MainFrame</span>
+                <span class="mb-3 mb-md-0 text-body-secondary"></span>
+            </div>
+
+            <p class="float-end"><a href="#">Подняться</a></p>
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#discord"></use></svg></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="https://t.me/tetinker"><svg class="bi" width="24" height="24"><use xlink:href="#telegram"></use></svg></a></li>
+            </ul>
+        </footer>
+    </div>
 </div>

@@ -1,45 +1,37 @@
-<div th:fragment="header">
-    <header class="p-3 mb-3 border-bottom">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
-            <!--            <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">-->
-            <div class="nav justify-content-left">
-                        <span class="navbar-text" id="info">
-                        </span>
-            </div>
-            <div class="container">
-                <a class="navbar-brand" href="#">Main</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarsExample07">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <!--                        <li class="nav-item">-->
-                        <!--                            <a class="nav-link active" aria-current="page" href="/">Главная</a>-->
-                        <!--                        </li>-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Новости</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Анализатор</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Манчкин</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Информация</a>
-                        </li>
-                    </ul>
+<div th:fragment="header" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+     xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <header class="p-3 text-bg-dark fixed-top">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Okaeri"><use xlink:href="#house"></use></svg>
+                </a>
 
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a th:href="@{/}" class="nav-link px-2 text-white">Главная</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Новости</a></li>
+                    <li><a th:href="@{/analyze}" class="nav-link px-2 text-white">Анализатор</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Манчкин</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Информация</a></li>
+                    <li><a th:href="@{/admin}" class="nav-link px-2 text-white">Админ-панель</a></li>
+                </ul>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Найти..." aria-label="Поиск">
+                </form>
+
+                <div class="text-end" sec:authorize="!isAuthenticated()">
+                    <a type="button" class="btn btn-outline-light me-2" th:href="@{/login}">Вход</a>
+                    <a type="button" class="btn btn-btn-warning me-2" th:href="@{/registration}">Регистрация</a>
+<!--                    <button type="button" class="btn btn-warning">Регистрация</button>-->
+                </div>
+                <div class="text-end" sec:authorize="isAuthenticated()">
+                    <h5>Пользователь: <i th:text="${user.name}"></i></h5>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="btn btn-outline-light me-2" type="submit" value="Выход"/>
+                    </form>
                 </div>
             </div>
-            <form role="search">
-                <input class="form-control" type="search" placeholder="Искать" aria-label="Искать">
-            </form>
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{'/logout'}" style="color: #a2a2a2">Выйти</a>
-                </li>
-            </ul>
-        </nav>
+        </div>
     </header>
 </div>

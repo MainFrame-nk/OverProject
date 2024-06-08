@@ -2,18 +2,21 @@ package nk.mframe.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import nk.mframe.dto.UserDTO;
-import nk.mframe.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import nk.mframe.dto.UserDTO;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "users")
+@Getter
+@Setter
+@Table(name = "user")
 @Data
 @Builder
 @AllArgsConstructor
@@ -28,7 +31,7 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "login", unique = true)
     private String login;
-    @Column(name = "nickname", unique = true)
+    @Column(name = "nickname")
     private String nickname;
     @Column(name = "phoneNumber")
     private String phoneNumber;
@@ -41,30 +44,52 @@ public class User implements UserDetails {
 //    private Image avatar;
     @Column(name = "password", length = 1000)
     private String password;
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role" ,
-            joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
+//    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+//    @CollectionTable(name = "user_role" ,
+//            joinColumns = @JoinColumn(name = "user_id"))
+//    @Enumerated(EnumType.STRING)
+//    private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
+
     private LocalDateTime dateOfCreated;
+
+
+//    public String roleToString() {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for (Role role : roles) {
+//            stringBuilder.append(role.toString()).append(" ");
+//        }
+//        return stringBuilder.toString();
+//    }
 
     @PrePersist
     private void init() {
         dateOfCreated = LocalDateTime.now();
     }
 
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public List<String> getNameRoles() {
+        return this.roles.stream().map(Role::getRole).map(x->x.substring(5)).collect(Collectors.toList());
+    }
+
+    public String getAllRolesWithOutBrackets (Set<Role> roles){
+        return roles.stream().map(Role::getRole).map(x->x.substring(5)).collect(Collectors.joining(", "));
+    }
     public UserDTO toUserDTO() {
         return UserDTO.toUserDTO(this);
     }
 
-    // Security
-
-    public boolean isAdmin() {
-        return roles.contains(Role.ROLE_ADMIN);
-    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return getRoles();
     }
 
     @Override

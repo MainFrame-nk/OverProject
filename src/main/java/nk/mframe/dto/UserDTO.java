@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nk.mframe.enums.Role;
+import nk.mframe.model.Role;
 import nk.mframe.model.User;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Data
@@ -18,10 +19,12 @@ import java.util.Set;
 public class UserDTO {
     private Long id;
     private String name;
+    private String login;
+    private String nickname;
     private String email;
     private String phoneNumber;
     private boolean active;
-    private Set<Role> roles = new HashSet<>();
+    private Set<RoleDTO> roles = new HashSet<>();
     private String password;
     private LocalDateTime dateOfCreated;
 
@@ -29,9 +32,12 @@ public class UserDTO {
         return UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
+                .nickname(user.getNickname())
+                .login(user.getLogin())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .dateOfCreated(user.getDateOfCreated())
+                .roles(user.getRoles().stream().map(Role::toRoleDto).collect(Collectors.toSet()))
                 .build();
     }
 }
